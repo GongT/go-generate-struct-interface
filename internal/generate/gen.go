@@ -69,18 +69,26 @@ func (g *Generater) AddField(structName string, varName string, expr ast.Expr) {
 	} else {
 	}
 
+	Type := ""
+
 	Getter := ""
 	if getter {
-		Getter = fmt.Sprintf("func (self *%s) Get%s() %s{\n\treturn self.%s\n}", structName, upVarName, typeStr, varName)
+		Getter = fmt.Sprintf("func (self %s) Get%s() %s{\n\treturn self.%s\n}", structName, upVarName, typeStr, varName)
+		Type += fmt.Sprintf("Get%s() %s", upVarName, typeStr)
 	}
 
 	Setter := ""
 	if setter {
 		Setter = fmt.Sprintf("func (self *%s) Set%s(v %s) {\n\tself.%s = v\n}", structName, upVarName, typeStr, varName)
+
+		if getter {
+			Type += "\n"
+		}
+		Type += fmt.Sprintf("Set%s(v %s)", upVarName, typeStr)
 	}
 
 	g.structs[structName] = append(g.structs[structName], define{
-		Type:   fmt.Sprintf("Get%s() %s", upVarName, typeStr),
+		Type:   Type,
 		Getter: Getter,
 		Setter: Setter,
 	})
