@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/GongT/go-generate-struct-interface/v2/internal/generate"
-	"github.com/GongT/go-generate-struct-interface/v2/internal/tools"
+	"github.com/GongT/go-generate-struct-interface/internal/generate"
+	"github.com/GongT/go-generate-struct-interface/internal/tools"
 	"github.com/davecgh/go-spew/spew"
 )
 

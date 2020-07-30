@@ -1,4 +1,4 @@
-module github.com/GongT/go-generate-struct-interface/v2
+module github.com/GongT/go-generate-struct-interface
 
 go 1.14
 

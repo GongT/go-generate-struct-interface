@@ -5,7 +5,7 @@ import (
 	"go/ast"
 	"strings"
 
-	"github.com/GongT/go-generate-struct-interface/v2/internal/tools"
+	"github.com/GongT/go-generate-struct-interface/internal/tools"
 )
 
 type define struct {
