@@ -17,6 +17,7 @@ type define struct {
 type Generater struct {
 	contents string
 	structs  map[string][]define
+	comments []string
 }
 
 func NewGenerater(contents string) *Generater {
@@ -26,8 +27,19 @@ func NewGenerater(contents string) *Generater {
 	}
 }
 
+func (g *Generater) WriteComment(comment string) {
+	g.comments = append(g.comments, comment)
+}
+
 func (g *Generater) Print(packageName string) []byte {
-	genContent := "package " + packageName + "\n\n"
+	genContent := ""
+
+	for _, comment := range g.comments {
+		genContent += comment + "\n"
+	}
+	genContent += "\n"
+
+	genContent += "package " + packageName + "\n\n"
 
 	for structName, defs := range g.structs {
 		upStructName := tools.Ucfirst(structName)

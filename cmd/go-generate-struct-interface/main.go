@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -24,13 +23,13 @@ func main() {
 	if len(filePath) == 0 || len(pkgName) == 0 {
 		tools.Die("Required environment variable did not set, must call by `go generate`")
 	}
-	fmt.Printf("GOFILE=%s\n", filePath)
-	fmt.Printf("GOPACKAGE=%s\n", pkgName)
+	// fmt.Printf("GOFILE=%s\n", filePath)
+	// fmt.Printf("GOPACKAGE=%s\n", pkgName)
 
 	fileNameBase := strings.TrimSuffix(filePath, filepath.Ext(filePath))
 	resultFile := filepath.Join(filepath.Dir(filePath), fileNameBase+".getters"+filepath.Ext(filePath))
 
-	fmt.Printf(" * resultFile: %s\n", resultFile)
+	// fmt.Printf(" * resultFile: %s\n", resultFile)
 
 	contentBs, err := ioutil.ReadFile(filePath)
 	if err != nil {
@@ -43,6 +42,15 @@ func main() {
 	}
 
 	gen := generate.NewGenerater(content)
+
+	comments, err := parser.ParseFile(token.NewFileSet(), filePath, content, parser.PackageClauseOnly+parser.ParseComments)
+	for _, group := range comments.Comments {
+		for _, comment := range group.List {
+			if !strings.HasPrefix(comment.Text, "//go:generate ") {
+				gen.WriteComment(comment.Text)
+			}
+		}
+	}
 
 	for _, node := range file.Decls {
 		if decl, ok := node.(*ast.GenDecl); ok {
@@ -77,8 +85,4 @@ func main() {
 	if err != nil {
 		tools.Die("Failed write output file: %s", err.Error())
 	}
-}
-
-func stringify(node ast.Node) {
-
 }

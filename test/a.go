@@ -1,4 +1,5 @@
 //go:generate go run ../cmd/go-generate-struct-interface
+// +build !windows
 
 package xxxx
 
