@@ -3,8 +3,15 @@
 Generate interface and Get* methods from a struct.
 
 
+## Install:
+```bash
+go get -u github.com/GongT/go-generate-struct-interface/cmd/go-generate-struct-interface
+```
+
 ## Usage:
-Each file must contains and only contains one struct
+
+Add this line at first line:
+
 ```go
 //go:generate go-generate-struct-interface
 
@@ -19,3 +26,5 @@ type someStruct struct {
 	priField string
 }
 ```
+
+and run [go generate](https://blog.golang.org/generate)

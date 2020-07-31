@@ -26,8 +26,8 @@ func main() {
 	// fmt.Printf("GOFILE=%s\n", filePath)
 	// fmt.Printf("GOPACKAGE=%s\n", pkgName)
 
-	fileNameBase := strings.TrimSuffix(filePath, filepath.Ext(filePath))
-	resultFile := filepath.Join(filepath.Dir(filePath), fileNameBase+".getters"+filepath.Ext(filePath))
+	fileNameBase := filepath.Base(filePath)
+	resultFile := filepath.Join(filepath.Dir(filePath), "generate."+fileNameBase)
 
 	// fmt.Printf(" * resultFile: %s\n", resultFile)
 
