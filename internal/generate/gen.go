@@ -18,17 +18,27 @@ type Generater struct {
 	contents string
 	structs  map[string][]define
 	comments []string
+	imports  map[string]string
 }
 
 func NewGenerater(contents string) *Generater {
 	return &Generater{
 		contents: contents,
 		structs:  make(map[string][]define),
+		imports:  make(map[string]string),
 	}
 }
 
 func (g *Generater) WriteComment(comment string) {
 	g.comments = append(g.comments, comment)
+}
+
+func (g *Generater) WriteImport(name *ast.Ident, path *ast.BasicLit) {
+	nstr := ""
+	if name != nil {
+		nstr = name.String()
+	}
+	g.imports[path.Value] = nstr
 }
 
 func (g *Generater) Print(packageName string) []byte {
@@ -40,6 +50,19 @@ func (g *Generater) Print(packageName string) []byte {
 	genContent += "\n"
 
 	genContent += "package " + packageName + "\n\n"
+
+	if len(g.imports) > 0 {
+		genContent += "import (\n"
+		for path, name := range g.imports {
+			genContent += "\t"
+			if name != "" {
+				genContent += name + " "
+			}
+
+			genContent += path + "\n"
+		}
+		genContent += ")\n"
+	}
 
 	for structName, defs := range g.structs {
 		upStructName := tools.Ucfirst(structName)
@@ -85,7 +108,7 @@ func (g *Generater) AddField(structName string, varName string, expr ast.Expr) {
 
 	Getter := ""
 	if getter {
-		Getter = fmt.Sprintf("func (self %s) Get%s() %s{\n\treturn self.%s\n}", structName, upVarName, typeStr, varName)
+		Getter = fmt.Sprintf("func (self %s) Get%s() %s {\n\treturn self.%s\n}", structName, upVarName, typeStr, varName)
 		Type += fmt.Sprintf("Get%s() %s", upVarName, typeStr)
 	}
 

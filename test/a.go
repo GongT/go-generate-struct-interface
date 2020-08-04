@@ -1,7 +1,18 @@
 //go:generate go run ../cmd/go-generate-struct-interface
 // +build !windows
 
-package xxxx
+package main
+
+import (
+	fff "fmt"
+
+	net "net"
+	"runtime"
+)
+
+func init() {
+	fff.Print(runtime.GOOS)
+}
 
 type someType struct {
 	Sub string
@@ -23,6 +34,8 @@ type someStruct struct {
 	Map            map[string]bool
 	ComplexMap1    map[*someType]struct{ i int }
 	ComplexMap2    map[struct{ i int }]*someType
+
+	RemoteField net.IP
 
 	priField      string
 	priFieldNoGet string `getter:"-"`

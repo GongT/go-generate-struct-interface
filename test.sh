@@ -4,4 +4,5 @@ set -Eeuo pipefail
 
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-go generate test/a.go
+go generate ./test
+go run ./test

@@ -52,6 +52,10 @@ func main() {
 		}
 	}
 
+	for _, node := range file.Imports {
+		gen.WriteImport(node.Name, node.Path)
+	}
+
 	for _, node := range file.Decls {
 		if decl, ok := node.(*ast.GenDecl); ok {
 			if decl.Tok != token.TYPE {
